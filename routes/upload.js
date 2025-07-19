@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const cloudinary = require('../services/cloudinary');
+const { runCleanupNow, getCleanupInfo } = require('../services/cloudinaryCleanup');
 const fs = require('fs');
 
 const router = express.Router();
@@ -34,6 +35,29 @@ router.post('/', upload.array('image', 5), async (req, res) => {
         }
       });
     }
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// API để chạy cleanup thủ công
+router.post('/cleanup', async (req, res) => {
+  try {
+    const result = await runCleanupNow();
+    res.json({ 
+      message: 'Cleanup completed successfully',
+      result: result
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// API để xem thông tin cleanup
+router.get('/cleanup-info', async (req, res) => {
+  try {
+    const info = await getCleanupInfo();
+    res.json(info);
+  } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });

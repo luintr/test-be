@@ -5,6 +5,7 @@ const path = require("path");
 const fs = require("fs");
 const removeRoute = require("./routes/remove");
 const uploadRoute = require('./routes/upload');
+const { initCleanupCron } = require('./services/cloudinaryCleanup');
 
 // Load environment variables
 dotenv.config();
@@ -18,6 +19,9 @@ const uploadsDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
+
+// Initialize cleanup cron job
+initCleanupCron();
 
 // Production optimizations
 if (isProduction) {
