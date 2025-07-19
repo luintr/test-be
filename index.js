@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const path = require("path");
 const fs = require("fs");
 const removeRoute = require("./routes/remove");
+const uploadRoute = require('./routes/upload');
 
 // Load environment variables
 dotenv.config();
@@ -68,7 +69,7 @@ app.get("/health", (req, res) => {
 
 // API routes
 app.use("/api/remove", removeRoute);
-
+app.use("/api/upload", uploadRoute);
 // Error handling middleware
 app.use((err, req, res, next) => {
   const errorMessage = isProduction ? 'Internal server error' : err.message;
